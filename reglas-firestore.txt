@@ -1,0 +1,77 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+		match /{document=**} {
+    	allow read, write: if true;
+    }
+    
+    // Reglas para la colección de jugadores
+    match /players/{playerId} {
+      // Permitir a todos leer las publicaciones
+      allow read: if true;
+
+      // Permitir crear, actualizar y eliminar publicaciones solo a administradores
+      allow create, update, delete: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+
+      // Reglas para la subcolección de comentarios
+      match /comments/{commentId} {
+        // Permitir crear comentarios a los usuarios autenticados
+        allow create: if request.auth != null;
+
+        // Permitir leer comentarios a cualquier usuario
+        allow read: if true;
+
+        // Permitir actualizar y eliminar comentarios solo al autor del comentario
+        allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      }
+    }
+
+    // Reglas para la colección de usuarios
+    match /users/{user} {
+    	allow read: if request.auth != null;
+      
+      allow create, update: if
+      	request.auth != null &&
+        request.auth.uid == user;
+    }
+    
+    // FORO
+    match /chat/{message} {
+    allow read: if request.auth != null;
+    
+    allow create: if
+    	request.auth != null &&
+      request.auth.uid == request.resource.data.userId &&
+      request.auth.token.email == request.resource.data.email;
+    }
+    
+    // CHAT PRIVADO
+    match /private-chats/{chat} {
+    
+    	allow read: if
+      		request.auth != null && 
+        	resource == null;
+    
+    	allow read: if
+      		request.auth != null &&
+        	request.auth.uid in resource.data.users;
+        
+      allow create: if
+      		request.auth != null &&
+        	request.auth.uid in request.resource.data.users;
+        
+  	match /messages/{message} {
+      allow read: if
+          request.auth != null &&
+          request.auth.uid in get(/databases/$(database)/documents/private-chats/$(chat)).data.users;
+          
+        allow create: if
+        	request.auth != null &&
+          request.auth.uid in get(/databases/$(database)/documents/private-chats/$(chat)).data.users &&
+          request.auth.uid == request.resource.data.sender_id;
+      }
+    }
+  }
+}

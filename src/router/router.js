@@ -20,8 +20,8 @@ const routes = [
     { path: '/perfil',              component: MyProfile,   meta: { requiresAuth: true } },
     { path: '/usuario/:id',         component: UserProfile, meta: { requiresAuth: true } },
     { path: '/usuario/:id/chat',    component: PrivateChat, meta: { requiresAuth: true } },
-    { path: '/jugadas',               component: Plays },
-    { path: '/play/:id',            name: 'PlayDetails',    component: PlayDetails }, // Ruta para PlayDetails.vue
+    { path: '/jugadas',             component: Plays },
+    { path: '/play/:id',            name: 'PlayDetails',    component: PlayDetails },
 ];
 
 const router = createRouter({

@@ -35,7 +35,7 @@
             <router-link to="/olvide-contrasena" class="text-sm text-blue-500 hover:underline">¿Olvidaste tu contraseña?</router-link>
           </div>
         </div>
-        <MainButton type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+        <MainButton type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50">
           <Loader v-if="loading" />
           <template v-else>Ingresar</template>
         </MainButton>

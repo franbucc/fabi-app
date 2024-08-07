@@ -44,7 +44,7 @@
                             <MainLabel for="message">Mensaje</MainLabel>
                             <textarea
                                 id="message"
-                                class="w-full p-2 border border-gray-300 rounded focus:ring focus:ring-indigo-200"
+                                class="w-full p-2 border border-gray-300 rounded focus:ring focus:ring-orange-200"
                                 v-model="newMessage.content"
                                 placeholder="Escribe tu mensaje aquí..."
                             ></textarea>
@@ -52,7 +52,7 @@
                         <MainButton 
                             type="submit"
                             text="Enviar"
-                            class="w-full py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700"
+                            class="w-full py-2 bg-orange-600 text-white font-semibold rounded hover:bg-orange-700"
                         />
                     </form>
                 </section>

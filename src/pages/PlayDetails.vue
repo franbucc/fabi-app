@@ -1,5 +1,5 @@
 <template>
-
+<Loading />
   <div v-if="play" class="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
     <div class="absolute inset-0 -z-10 overflow-hidden">
       <svg
@@ -67,18 +67,18 @@
             <p>Descripción de la jugada: {{ play.description }}</p>
             <ul role="list" class="mt-8 space-y-8 text-gray-600">
               <li class="flex gap-x-3">
-                <CloudArrowUpIcon class="mt-1 h-5 w-5 flex-none text-indigo-600" aria-hidden="true" />
+                <CloudArrowUpIcon class="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                 <span><strong class="font-semibold text-gray-900">Nivel de Dificultad:</strong> {{ play.play_level }}
                   Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque,
                   iste dolor cupiditate blanditiis ratione.</span>
               </li>
               <li class="flex gap-x-3">
-                <LockClosedIcon class="mt-1 h-5 w-5 flex-none text-indigo-600" aria-hidden="true" />
+                <LockClosedIcon class="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                 <span><strong class="font-semibold text-gray-900">Paso #1:</strong> Anim aute id magna aliqua ad ad non
                   deserunt sunt. Qui irure qui lorem cupidatat commodo.</span>
               </li>
               <li class="flex gap-x-3">
-                <ArrowRightIcon class="mt-1 h-5 w-5 flex-none text-indigo-600" aria-hidden="true" />
+                <ArrowRightIcon class="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                 <span><strong class="font-semibold text-gray-900">Paso #2:</strong> Ac tincidunt sapien vehicula erat
                   auctor pellentesque rhoncus. Et magna sit morbi lobortis.</span>
               </li>
@@ -145,8 +145,12 @@ import { db } from '../services/firebase';
 import { doc, getDoc, collection, getDocs, addDoc } from 'firebase/firestore';
 import { auth } from '../services/firebase'; // Importa el servicio de autenticación de Firebase
 import { ArrowRightIcon } from "@vue-hero-icons/outline"
+import Loading from '/src/components/Loading.vue';
 
 export default {
+  components: {
+    Loading
+  },
   name: 'PlayDetails',
   data() {
     return {

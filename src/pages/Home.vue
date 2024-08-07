@@ -78,37 +78,43 @@
 			</div>
 		</div>
 
-
-
 		<!-- HERO -->
 		<div class="relative isolate px-6 pt-14 lg:px-8">
 			<div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-				<img src="../../sobre-nosotros.jpg" alt="" class="absolute inset-0 -z-10 h-full w-full object-cover object-right md:object-center" />
+				<img src="../../sobre-nosotros.jpg" alt=""
+					class="absolute inset-0 -z-10 h-full w-full object-cover object-right md:object-center" />
 				<div class="hidden sm:mb-8 sm:flex sm:justify-center">
 					<div
 						class="relative rounded-full px-7 py-2 text-sm leading-6 text-white ring-1 ring-white hover:ring-gray-900/20">
-						El básquet nos motiva a ser mejores. <a href="#" class="font-semibold text-orange-400"><span
-								class="absolute inset-0" aria-hidden="true" />Ver más <span
-								aria-hidden="true">&rarr;</span></a>
+						<router-link to="/jugadas">
+							El básquet nos motiva a ser mejores. <a href="#" class="font-semibold text-orange-400"><span
+									class="inset-0" aria-hidden="true" />Ver más <span
+									aria-hidden="true">&rarr;</span></a>
+						</router-link>
 					</div>
 				</div>
 				<div class="text-center">
-					<h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">Potenciá tu estilo de juego hoy
-						mismo
+					<h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+						Potenciá tu estilo<br>de juego hoy mismo.
 					</h1>
-					<p class="mt-6 text-lg leading-8 text-gray-200">Somos una plataforma dedicada al básquetbol donde
-						encontrarás estrategias, foros y tutoriales. Registrate gratis y empezá a disfrutar de la
-						experiencia.</p>
+					<p class="mt-6 text-lg leading-8 text-gray-200">
+						Somos una plataforma dedicada al básquetbol donde encontrarás estrategias, foros y tutoriales. Registrate gratis y empezá a disfrutar de la experiencia.
+					</p>
 					<div class="mt-10 flex items-center justify-center gap-x-6">
-						<a href="#"
-							class="rounded-md bg-orange-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">Crear
-							Cuenta</a>
-						<a href="#" class="text-sm font-semibold leading-6 text-gray-200">Ver Jugadas <span
-								aria-hidden="true">→</span></a>
+						<router-link to="/registro">
+							<button
+								class="rounded-md bg-orange-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
+								Crear Cuenta
+							</button>
+						</router-link>
+						<router-link to="/jugadas">
+							<button class="text-sm font-semibold leading-6 text-gray-200">
+								Ver Jugadas <span aria-hidden="true">→</span>
+							</button>
+						</router-link>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
 
@@ -135,10 +141,10 @@
 		<section class="py-12">
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div class="text-left">
-					<h2 class="text-base font-semibold text-orange-600 tracking-wide uppercase">Jugadas destacadas</h2>
-					<p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-						Jugadas más Populares
-					</p>
+					<p class="text-base font-semibold text-orange-600 tracking-wide uppercase">Jugadas destacadas</p>
+					<h2 class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+						Jugadas más populares.
+					</h2>
 				</div>
 				<div class="mt-10 grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">
 					<div v-for="(post, index) in jugadas" :key="index" class="group relative">
@@ -152,7 +158,7 @@
 								<span>{{ post.category }}</span>
 							</div>
 							<a href="#" class="block mt-2">
-								<p class="text-xl font-semibold text-gray-900">{{ post.title }}</p>
+								<h3 class="text-xl font-semibold text-gray-900">{{ post.title }}</h3>
 								<p class="mt-3 text-base text-gray-500">{{ post.description }}</p>
 							</a>
 						</div>
@@ -176,9 +182,9 @@
 			</div>
 			<div class="flex-shrink-0 w-full text-center lg:w-auto">
 				<router-link to="/registro">
-					<p
+					<button
 						class="inline-block py-3 mx-auto text-lg font-medium text-center text-orange-600 bg-white rounded-md px-7 lg:px-10 lg:py-5">
-						Crear Cuenta</p>
+						Crear Cuenta</button>
 				</router-link>
 			</div>
 		</div>
@@ -188,7 +194,7 @@
 	<div class="bg-white py-24 sm:py-32">
 		<div class="mx-auto max-w-7xl px-6 lg:px-8">
 			<div class="mx-auto max-w-2xl lg:mx-0">
-				<h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Tendencias del Foro</h2>
+				<h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Tendencias del Foro.</h2>
 				<p class="mt-2 text-lg leading-8 text-gray-600">Las temáticas y debates más activos de esta semana aquí.
 				</p>
 			</div>
@@ -252,13 +258,13 @@
 						dentro de la cancha, este es tu lugar.</p>
 					<div class="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
 						<router-link to="/jugadas">
-							<p
+							<button
 								class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-								Ver Jugadas</p>
+								Ver Jugadas</button>
 						</router-link>
 						<router-link to="/registro">
-							<p class="text-sm font-semibold leading-6 text-white">Crear Cuenta<span aria-hidden="true">
-									→</span></p>
+							<button class="text-sm font-semibold leading-6 text-white">Crear Cuenta<span aria-hidden="true">
+									→</span></button>
 						</router-link>
 					</div>
 				</div>
@@ -286,7 +292,7 @@
 		</div>
 		<div class="mx-auto max-w-7xl px-6 lg:px-8">
 			<div class="mx-auto max-w-2xl lg:mx-0">
-				<h2 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">Mejorá tu juego hoy</h2>
+				<h2 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">Mejorá tu juego hoy.</h2>
 				<p class="mt-6 text-lg leading-8 text-gray-300">Contamos con un sistema preparado para que lleves tu
 					juego al próximo nivel a través de jugadas, tutoriales y videos.</p>
 			</div>
@@ -307,7 +313,7 @@
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="mb-14 text-center">
 				<h2 class="text-4xl text-center font-bold text-gray-900 lg:max-w-2xl lg:mx-auto mb-8">
-					Encontrá tu próxima jugada ganadora
+					Encontrá tu próxima jugada ganadora.
 				</h2>
 				<p class="text-base font-normal text-gray-500 lg:max-w-2xl lg:mx-auto mb-8">
 					Utilizando estrategias aplicadas en los mejores equipos del mundo.
@@ -430,10 +436,10 @@
 	<!-- FAQs -->
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
 		<div class="text-center mb-6">
-			<h2 class="text-base font-semibold text-orange-600 tracking-wide uppercase">Preguntas Frecuentes</h2>
-			<p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+			<p class="text-base font-semibold text-orange-600 tracking-wide uppercase">Preguntas Frecuentes</p>
+			<h2 class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
 				Recibimos muchas preguntas por día, aquí las principales.
-			</p>
+			</h2>
 		</div>
 		<div class="w-full max-w-2xl p-2 mx-auto rounded-2xl">
 			<div v-for="(item, index) in faqdata" :key="index" class="mb-5">
@@ -500,10 +506,10 @@ const navigation = [
 
 // Sobre Nosotros
 const stats = [
-	{ name: 'Jugadas online', value: '+50' },
-	{ name: 'Dedicado al básquet', value: 'Foro Comunitario' },
-	{ name: 'En tu perfil personalizado', value: 'Guardá tus jugadas' },
-	{ name: 'Usuarios registrados', value: '+300' },
+	{ name: 'Jugadas online.', value: '+50' },
+	{ name: 'Dedicado al básquet.', value: 'Foro Comunitario' },
+	{ name: 'En tu perfil personalizado.', value: 'Guardá tus jugadas' },
+	{ name: 'Usuarios registrados.', value: '+300' },
 ]
 
 // BLOG

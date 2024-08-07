@@ -22,16 +22,13 @@
                 class="rounded-full text-gray-900 bg-gray-50 py-3 px-7 min-[470px]:px-7 font-medium text-base transition-all duration-500 hover:bg-yellow-500 tab-active:bg-indigo-50 hover:text-white">Clutch</a>
             </li>
           </ul>
-          <input v-model="searchTerm" type="text" placeholder="Próximamente"
-            class="rounded-full py-2 px-4 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
           <button @click="searchPlays"
-            class="flex items-center py-2.5 pr-7 pl-5 max-sm:w-max rounded-full bg-orange-600 gap-2 font-semibold text-base text-white transition-all duration-500 hover:bg-gray-700">
+            class="flex items-center py-2.5 pr-2.5 pl-2.5 max-sm:w-max rounded-full bg-orange-600 gap-2 font-semibold text-base text-white transition-all duration-500 hover:bg-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
               stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M21 21l-4.35-4.35M10.5 18.75a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" />
             </svg>
-            Buscar
           </button>
 
 
@@ -153,7 +150,7 @@
               </div>
             </div>
             <div class="block">
-              <h4 class="text-gray-900 font-bold text-2xl px-1 leading-8 mb-9">{{ player.name }}</h4>
+              <h3 class="text-gray-900 font-bold text-2xl px-1 leading-8 mb-9">{{ player.name }}</h3>
               <div class="px-1 flex items-center justify-between  font-medium">
                 <p class="text-gray-600 mb-2"><span class="font-semibold">Dificultad:</span> {{ player.play_level }}</p>
                 <button
@@ -167,9 +164,8 @@
 
         </div>
       </div>
-      <a href="javascript:;"
-        class="cursor-pointer border border-gray-300 shadow-sm rounded-full py-3.5 px-7 w-52 flex justify-center items-center text-gray-900 font-semibold mx-auto transition-all duration-300 hover:bg-gray-100">Más
-        Jugadas</a>
+      <button
+        class="cursor-pointer border border-gray-300 shadow-sm rounded-full py-3.5 px-7 w-52 flex justify-center items-center text-gray-900 font-semibold mx-auto transition-all duration-300 hover:bg-gray-100">Más jugadas</button>
     </section>
 
   </div>

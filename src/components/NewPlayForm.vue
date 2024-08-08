@@ -1,15 +1,19 @@
 <template>
     <div v-if="showForm && isAdmin" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <form @submit.prevent="addPlayer"
-            class="bg-gradient-to-br from-orange-50 to-orange-100 shadow-lg rounded-lg p-8 mb-4 max-w-4xl w-full">
-            <div class="mb-6">
-                <label for="photo" class="block text-gray-900 text-lg font-semibold mb-2">Foto de la Jugada:</label>
+        <form @submit.prevent="addPlay"
+            class="bg-gradient-to-br from-orange-50 to-orange-100 shadow-lg rounded-lg p-8 mb-4 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <p>Tamaño recomendado: 720px x 480px.</p>
+
+            <!-- Campos para Pasos -->
+            <div v-for="(step, index) in steps" :key="index" class="mb-6">
+                <label :for="'step_image_' + index" class="block text-gray-900 text-lg font-semibold mb-2">Imagen del
+                    Paso #{{ index + 1 }}:</label>
                 <div class="flex items-center justify-center w-60 h-40 mb-4">
-                    <label for="photo" class="w-60 h-40 cursor-pointer relative block">
+                    <label :for="'step_image_' + index" class="w-60 h-40 cursor-pointer relative block">
                         <div
                             class="w-70 h-40 overflow-hidden rounded-lg border-2 border-orange-400 bg-white shadow-lg transition-transform transform hover:scale-105">
-                            <img v-if="photoUrl" :src="photoUrl" alt="Foto de la jugada"
-                                class="w-full h-full object-cover">
+                            <img v-if="step && step.photoUrl" :src="step.photoUrl"
+                                :alt="'Paso #' + (index + 1) + ' Imagen'" class="w-full h-full object-cover">
                             <div v-else class="w-full h-full flex items-center justify-center bg-gray-200">
                                 <svg class="h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
@@ -18,11 +22,15 @@
                                 </svg>
                             </div>
                         </div>
-                        <input type="file" id="photo" accept="image/*" class="hidden" @change="handlePhotoUpload">
+                        <input :id="'step_image_' + index" type="file" accept="image/*" class="hidden"
+                            @change="e => handleStepPhotoUpload(e, index)">
                     </label>
                 </div>
-                <p>Tamaño recomendado: 720px x 480px.</p>
+                <textarea v-model="steps[index].description" :id="'step_description_' + index" rows="2"
+                    class="w-full px-4 py-2 border-2 border-orange-300 rounded-lg shadow-md transition duration-300"
+                    placeholder="Descripción del paso #{{ index + 1 }}" required></textarea>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="mb-4">
                     <label for="name" class="block text-gray-900 text-lg font-semibold mb-2">Nombre de la
@@ -61,7 +69,7 @@
                         <option value="Clutch">Clutch</option>
                     </select>
                 </div>
-                <div class="flex justify-end gap-4">
+                <div class="flex justify-end gap-4 col-span-2">
                     <button type="submit"
                         class="px-6 py-3 bg-orange-500 text-white font-bold rounded-lg shadow-lg hover:bg-orange-600 transition duration-300 focus:outline-none">
                         Agregar Jugada
@@ -72,15 +80,16 @@
                     </button>
                 </div>
             </div>
-
         </form>
     </div>
 </template>
 
+
 <script>
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc } from 'firebase/firestore';
-import { db, storage } from '../services/firebase';
+import { collection, addDoc, getDoc, doc } from 'firebase/firestore';
+import { db, storage, auth } from '../services/firebase';
+
 
 export default {
     props: {
@@ -98,53 +107,24 @@ export default {
             name: '',
             play_level: '',
             description: '',
-            photo: null,
-            photoUrl: '',
             hover: [false, false, false, false, false],
             play_type: 'Ofensiva',
+            steps: [
+                { photo: null, photoUrl: '', description: '' },
+                { photo: null, photoUrl: '', description: '' },
+                { photo: null, photoUrl: '', description: '' }
+            ],
         };
     },
     methods: {
         closeForm() {
             this.$emit('closeForm');
         },
-        async addPlayer() {
-            try {
-                if (!this.photoUrl) {
-                    throw new Error("No se ha cargado ninguna foto.");
-                }
-
-                const storageRef = ref(storage, `players/${this.photo.name}`);
-                await uploadBytes(storageRef, this.photo);
-                this.photoUrl = await getDownloadURL(storageRef);
-
-                const newPlayer = {
-                    name: this.name,
-                    play_level: this.play_level,
-                    description: this.description,
-                    photoUrl: this.photoUrl,
-                    play_type: this.play_type,
-                };
-
-                await addDoc(collection(db, 'players'), newPlayer);
-
-                this.$emit('playerAdded', newPlayer);
-
-                this.name = '';
-                this.play_level = '';
-                this.description = '';
-                this.photo = null;
-                this.photoUrl = '';
-                this.play_type = 'Ofensiva';
-
-                this.closeForm();
-            } catch (error) {
-                console.error("Error adding player: ", error);
-            }
-        },
-        async handlePhotoUpload(event) {
+        async handleStepPhotoUpload(event, index) {
             const file = event.target.files[0];
             if (file) {
+                console.log(`File selected for step ${index}:`, file); // Verificar el archivo seleccionado
+
                 const image = new Image();
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -153,64 +133,92 @@ export default {
                 reader.readAsDataURL(file);
 
                 image.onload = () => {
-                    // Crear un canvas para recortar la imagen
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
 
-                    // Establecer las dimensiones del canvas con proporción 4:3
-                    const canvasWidth = 1440;
-                    const canvasHeight = 960;
-                    const aspectRatio = 4 / 3;
+                    const canvasWidth = 720;
+                    const canvasHeight = 480;
+                    const aspectRatio = 3 / 2;
 
-                    // Calcular el tamaño y posición del recorte
                     let drawWidth, drawHeight, offsetX, offsetY;
 
                     if (image.width / image.height > aspectRatio) {
-                        // Imagen es más ancha en comparación con el canvas
                         drawWidth = image.height * aspectRatio;
                         drawHeight = image.height;
                         offsetX = (image.width - drawWidth) / 2;
                         offsetY = 0;
                     } else {
-                        // Imagen es más alta en comparación con el canvas
                         drawWidth = image.width;
                         drawHeight = image.width / aspectRatio;
                         offsetX = 0;
                         offsetY = (image.height - drawHeight) / 2;
                     }
 
-                    // Ajustar dimensiones del canvas
                     canvas.width = canvasWidth;
                     canvas.height = canvasHeight;
 
-                    // Dibujar la imagen recortada en el canvas
                     ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight, 0, 0, canvasWidth, canvasHeight);
 
-                    // Convertir el canvas a un Blob para cargarlo
                     canvas.toBlob((blob) => {
-                        this.photo = blob;
-                        this.photoUrl = URL.createObjectURL(blob);
-                    }, 'image/jpeg'); // Puedes ajustar el tipo de imagen según necesites
+                        this.steps[index] = { ...this.steps[index], photoUrl: URL.createObjectURL(blob) };
+                        console.log(`Step ${index} photo URL set:`, this.steps[index].photoUrl); // Verificar la URL
+                    }, 'image/jpeg');
                 };
             }
         },
+        async uploadImage(file) {
+            const storageRef = ref(storage, `images/${file.name}`);
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            return downloadURL;
+        },
+
+        async addPlay() {
+            try {
+                const stepUrls = await Promise.all(this.steps.map(async (step) => {
+                    if (step.photoUrl && step.photoUrl.startsWith('blob:')) {
+                        const file = await fetch(step.photoUrl).then(res => res.blob());
+                        const url = await this.uploadImage(file);
+                        return url;
+                    }
+                    return step.photoUrl;
+                }));
+
+                const newPlay = {
+                    name: this.name,
+                    description: this.description,
+                    play_type: this.play_type,
+                    play_level: this.play_level,
+                    steps: this.steps.map((step, index) => ({
+                        ...step,
+                        photoUrl: stepUrls[index],
+                    })),
+                };
+
+                const docRef = await addDoc(collection(db, 'players'), newPlay);
+                console.log('Document written with ID: ', docRef.id);
+                this.$emit('play-added', { ...newPlay, id: docRef.id });
+                this.closeForm();
+            } catch (error) {
+                console.error('Error adding play: ', error);
+            }
+        },
+
 
         setDifficulty(level) {
             this.play_level = level;
-        },
-    },
+        }
+    }
 };
 </script>
+
 
 <style scoped>
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
     outline: none;
-    /* Elimina el contorno por defecto */
     border-color: #F97316;
-    /* Color naranja de Tailwind */
     box-shadow: 0 0 0 2px rgba(249, 115, 29, 0.3);
-    /* Agrega una sombra opcional para mejor visibilidad */
 }
 </style>

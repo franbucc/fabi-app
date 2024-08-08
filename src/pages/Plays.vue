@@ -86,8 +86,9 @@
           class="group cursor-pointer border border-gray-300 rounded-2xl p-5 flex flex-col transition-all duration-300 hover:border-orange-600">
           <div class="flex flex-col flex-grow">
             <div class="flex items-center mb-6">
-              <img v-if="player.photoUrl" :src="player.photoUrl" alt="Foto de la jugada"
-                src="https://pagedone.io/asset/uploads/1696244553.png" class="rounded-lg w-full">
+              <!-- Mostrar imagen del paso 1 -->
+              <img v-if="player.steps && player.steps.length > 0 && player.steps[0].photoUrl"
+                :src="player.steps[0].photoUrl" alt="Foto del Paso 1" class="rounded-lg w-full h-40 object-cover">
               <div v-else class="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
                 <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -110,10 +111,10 @@
             </div>
           </div>
           <div class="flex space-x-4 justify-end">
-            <button
+            <!-- <button
               class="flex items-center py-4 pr-4 pl-4 rounded-full bg-gray-100 gap-2 font-semibold text-base text-gray-700 transition-all duration-500 hover:bg-gray-300">
               <i class="fa fa-heart" aria-hidden="true"></i>
-            </button>
+            </button> -->
             <button
               class="cursor-pointer bg-orange-50 py-3 px-6 rounded-full flex items-center justify-center text-sm font-semibold text-orange-600 transition-all duration-500 focus:outline-none hover:bg-orange-100">
               Ver más
@@ -123,6 +124,7 @@
       </div>
     </div>
   </section>
+
 
 
   <button
@@ -165,16 +167,17 @@ export default {
   },
   methods: {
     async fetchPlayers() {
-      try {
-        const playersSnapshot = await getDocs(collection(db, 'players'));
-        playersSnapshot.forEach(async (playerDoc) => {
-          const player = { id: playerDoc.id, ...playerDoc.data() };
-          this.players[player.play_type].push(player);
-        });
-      } catch (error) {
-        console.error('Error fetching players: ', error);
-      }
-    },
+  try {
+    const playersSnapshot = await getDocs(collection(db, 'players'));
+    playersSnapshot.forEach(async (playerDoc) => {
+      const player = { id: playerDoc.id, ...playerDoc.data() };
+      this.players[player.play_type].push(player);
+    });
+  } catch (error) {
+    console.error('Error fetching players: ', error);
+  }
+},
+
     async checkUserRole() {
       onAuthStateChanged(auth, async (user) => {
         if (user) {

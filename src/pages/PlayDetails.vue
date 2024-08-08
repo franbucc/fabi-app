@@ -1,7 +1,6 @@
 <template>
 
   <div v-if="play">
-
     <section class="py-14 lg:py-24 relative z-0 bg-gray-50">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative text-center">
         <p class="text-base font-semibold leading-7 text-orange-600">Jugada {{ play.play_type }}</p>
@@ -104,10 +103,6 @@
         </div>
 
         <!-- Fin Contenido -->
-
-
-
-
       </div>
     </section>
 
@@ -128,8 +123,8 @@
                 <span v-else>Enviar comentario</span>
               </button>
             </form>
-    <!-- Mensaje de error -->
-    <p v-if="errorMessage" class="text-red-500 mt-2">{{ errorMessage }}</p>
+            <!-- Mensaje de error -->
+            <p v-if="errorMessage" class="text-red-500 mt-2">{{ errorMessage }}</p>
 
 
             <div v-for="(comment, index) in sortedComments" :key="index"
@@ -167,6 +162,8 @@
     </section>
 
   </div>
+
+  
   <Loading v-else />
 </template>
 
@@ -231,13 +228,13 @@ export default {
     async submitComment() {
       // Limpiar el mensaje de error
       this.errorMessage = '';
-      
+
       // Validar que el comentario tenga al menos 5 caracteres
       if (this.newCommentText.length < 5) {
         this.errorMessage = 'Por favor, escribe un comentario de al menos 5 caracteres.';
         return; // Detener la función si la validación falla
       }
-      
+
       try {
         const playId = this.$route.params.id;
         this.submittingComment = true;

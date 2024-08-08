@@ -1,150 +1,180 @@
 <template>
-<Loading />
-  <div v-if="play" class="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
-    <div class="absolute inset-0 -z-10 overflow-hidden">
-      <svg
-        class="absolute left-[max(50%,25rem)] top-0 h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
-        aria-hidden="true">
-        <defs>
-          <pattern id="e813992c-7d03-4cc4-a2bd-151760b470a0" width="200" height="200" x="50%" y="-1"
-            patternUnits="userSpaceOnUse">
-            <path d="M100 200V.5M.5 .5H200" fill="none" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" stroke-width="0" fill="url(#e813992c-7d03-4cc4-a2bd-151760b470a0)" />
-      </svg>
-    </div>
 
-    <div
-      class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
-      <div
-        class="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
-        <div class="lg:pr-4">
-          <!-- Botón para volver atrás -->
-          <router-link to="/jugadas" class="block w-full max-w-xs mt-4 mb-8">
-            <button
-              class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center w-full">
-              <svg class="w-4 h-4 mr-2 transform -rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                fill="currentColor">
-                <path fill-rule="evenodd"
-                  d="M9.293 4.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586L9.293 5.707a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
-              Volver para atrás
-            </button>
-          </router-link>
-          <div class="lg:max-w-lg">
-            <p class="text-base font-semibold leading-7 text-orange-600">Jugada {{ play.play_type }}</p>
-            <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ play.name }}</h1>
-            <p class="mt-6 text-xl leading-8 text-gray-700">Aquí irá una descripción breve de la jugada.</p>
-          </div>
-        </div>
-      </div>
-      <!-- Imagen principal -->
-      <div class="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
-        <img v-if="play.photoUrl" :src="play.photoUrl" alt="Foto de la jugada"
-          class="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
-          @click="openModal(play.photoUrl)">
-      </div>
+  <div v-if="play">
 
-      <!-- Modal -->
-      <div v-if="isModalOpen" @click.self="closeModal"
-        class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-        <div class="relative max-w-4xl mx-auto p-4 bg-white rounded-lg shadow-lg">
-          <button @click="closeModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    <section class="py-14 lg:py-24 relative z-0 bg-gray-50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative text-center">
+        <p class="text-base font-semibold leading-7 text-orange-600">Jugada {{ play.play_type }}</p>
+        <h1
+          class="max-w-2xl mx-auto text-center font-manrope font-bold text-4xl  text-gray-900 mb-5 md:text-5xl md:leading-snug">
+          {{ play.name }}
+        </h1>
+        <p class="max-w-m mx-7 text-center text-base font-normal leading-7 text-gray-500 mb-9">{{ play.description }}
+        </p>
+        <p class="text-gray-500 text-sm mb-4">Dificultad</p>
+        <p><font-awesome-icon v-for="i in 5" :key="i" :icon="['fas', 'basketball-ball']" :class="[
+          'text-3xl', 'mr-2', 'ml-2',
+          i <= play.play_level ? 'text-orange-500' : 'text-gray-300'
+        ]" /></p>
+
+      </div>
+    </section>
+
+    <section class="py-14 lg:py-24 relative">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative ">
+        <router-link to="/jugadas" class="block w-full max-w-xs mt-4 mb-8">
+          <button
+            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center w-full">
+            <svg class="w-4 h-4 mr-2 transform -rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+              fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M9.293 4.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586L9.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd" />
             </svg>
+            Volver para atrás
           </button>
-          <img :src="modalImage" alt="Imagen de la jugada" class="w-full h-auto rounded-lg">
-        </div>
-      </div>
+        </router-link>
 
-      <div
-        class="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
-        <div class="lg:pr-4">
-          <div class="max-w-xl text-base leading-7 text-gray-700 lg:max-w-lg">
-            <p>Descripción de la jugada: {{ play.description }}</p>
-            <ul role="list" class="mt-8 space-y-8 text-gray-600">
-              <li class="flex gap-x-3">
-                <CloudArrowUpIcon class="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
-                <span><strong class="font-semibold text-gray-900">Nivel de Dificultad:</strong> {{ play.play_level }}
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque,
-                  iste dolor cupiditate blanditiis ratione.</span>
-              </li>
-              <li class="flex gap-x-3">
-                <LockClosedIcon class="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
-                <span><strong class="font-semibold text-gray-900">Paso #1:</strong> Anim aute id magna aliqua ad ad non
-                  deserunt sunt. Qui irure qui lorem cupidatat commodo.</span>
-              </li>
-              <li class="flex gap-x-3">
-                <ArrowRightIcon class="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
-                <span><strong class="font-semibold text-gray-900">Paso #2:</strong> Ac tincidunt sapien vehicula erat
-                  auctor pellentesque rhoncus. Et magna sit morbi lobortis.</span>
-              </li>
-            </ul>
-            <h2 class="mt-16 text-2xl font-bold tracking-tight text-gray-900">Resumen de la Jugada.</h2>
-            <p class="mt-6">Id orci tellus laoreet id ac. Dolor, aenean leo, ac etiam consequat in. Convallis arcu ipsum
-              urna nibh. Pharetra, euismod vitae interdum mauris enim, consequat vulputate nibh. Maecenas pellentesque
-              id sed tellus mauris, ultrices mauris. Tincidunt enim cursus ridiculus mi. Pellentesque nam sed nullam sed
-              diam turpis ipsum eu a sed convallis diam.</p>
+        <!-- Contenido -->
+
+        <!-- PASO 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-9 border-b-4 border-orange-500 pb-6 mb-6">
+          <!-- Imagen -->
+          <div class="img-box flex justify-center lg:justify-start">
+            <img v-if="play.photoUrl" :src="play.photoUrl" alt="Foto de la jugada" class="max-lg:mx-auto"
+              @click="openModal(play.photoUrl)">
+
+            <!-- Modal -->
+            <div v-if="isModalOpen" @click.self="closeModal"
+              class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+              <div class="relative max-w-4xl mx-auto p-4 bg-white rounded-lg shadow-lg">
+                <button @click="closeModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                  </svg>
+                </button>
+                <img :src="modalImage" alt="Imagen de la jugada" class="w-full h-auto rounded-lg">
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col justify-start lg:pl-[100px]">
+            <div class="data w-full">
+              <h2 class="font-manrope font-bold text-4xl lg:text-4xl text-black mb-3 max-lg:text-center">
+                Paso #1
+              </h2>
+              <p class="font-normal text-lg leading-8 text-gray-500 max-lg:text-center max-w-2xl mx-auto">
+                Descripción del paso #1.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 2 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-9 border-b-4 border-orange-500 pb-6 mb-6">
+          <!-- Imagen -->
+          <div class="img-box flex justify-center lg:justify-start">
+            <img v-if="play.photoUrl" :src="play.photoUrl" alt="Foto de la jugada" class="max-lg:mx-auto"
+              @click="openModal(play.photoUrl)">
+
+            <!-- Modal -->
+            <div v-if="isModalOpen" @click.self="closeModal"
+              class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+              <div class="relative max-w-4xl mx-auto p-4 bg-white rounded-lg shadow-lg">
+                <button @click="closeModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                  </svg>
+                </button>
+                <img :src="modalImage" alt="Imagen de la jugada" class="w-full h-auto rounded-lg">
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col justify-start lg:pl-[100px]">
+            <div class="data w-full">
+              <h2 class="font-manrope font-bold text-4xl lg:text-4xl text-black mb-3 max-lg:text-center">
+                Paso #2
+              </h2>
+              <p class="font-normal text-lg leading-8 text-gray-500 max-lg:text-center max-w-2xl mx-auto">
+                Descripción del paso #2.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fin Contenido -->
+
+
+
+
+      </div>
+    </section>
+
+    <!-- COMENTARIOS -->
+    <section class="py-24 relative">
+      <div class="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
+        <div class="w-full flex-col justify-start items-start lg:gap-10 gap-6 inline-flex">
+          <h2 class="text-gray-900 text-3xl font-bold font-manrope leading-normal">Escribí tu comentario</h2>
+          <div class="w-full flex-col justify-start items-start lg:gap-9 gap-6 flex">
+            <!-- Formulario de comentarios -->
+            <form @submit.prevent="submitComment" class="w-full relative flex justify-between gap-2">
+              <input type="text" id="comment" v-model="newCommentText"
+                class="w-full py-3 px-5 rounded-lg border border-gray-300 bg-white shadow-[0px_1px_2px_0px_rgba(16,_24,_40,_0.05)] text-gray-900 placeholder-gray-400 text-lg font-normal leading-relaxed focus-visible:outline-none focus-visible:shadow-[0px_0px_0px_2px_orange] focus-visible:border-transparent"
+                placeholder="Escribí tu comentario aquí....">
+              <button type="submit"
+                class="cursor-pointer py-3 px-6 flex items-center justify-center text-sm font-semibold text-black transition-all duration-500 hover:text-orange-500 absolute right-6 top-[6px]">
+                <span v-if="submittingComment">Publicando comentario...</span>
+                <span v-else>Enviar comentario</span>
+              </button>
+            </form>
+    <!-- Mensaje de error -->
+    <p v-if="errorMessage" class="text-red-500 mt-2">{{ errorMessage }}</p>
+
+
+            <div v-for="(comment, index) in sortedComments" :key="index"
+              class="w-full flex-col justify-start items-start gap-8 flex">
+              <div class="w-full flex-col justify-start items-end gap-5 flex">
+                <div
+                  class="w-full p-6 bg-white rounded-2xl border border-gray-200 flex-col justify-start items-start gap-8 flex">
+                  <div class="w-full flex-col justify-center items-start gap-3.5 flex">
+                    <div class="w-full justify-between items-center inline-flex">
+                      <div class="justify-start items-center gap-2.5 flex">
+                        <div class="w-10 h-10 bg-gray-300 rounded-full justify-start items-start gap-2.5 flex">
+                          <img class="rounded-full" src="https://pagedone.io/asset/uploads/1714988283.png"
+                            alt="Foto de perfil" />
+                        </div>
+                        <div class="flex-col justify-start items-start gap-1 inline-flex">
+                          <h5 class="text-gray-900 text-sm font-semibold leading-snug">{{ comment.userEmail }}</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="text-gray-800 text-sm font-normal leading-snug">{{ comment.text }}</p>
+                  </div>
+                  <div class="w-full justify-between items-center inline-flex">
+                    <div class="justify-start items-center gap-4 flex">
+                      <div class="justify-start items-center gap-1.5 flex">
+                        <h5 class="text-gray-900 text-sm font-normal leading-snug">{{ formatDate(comment.date) }}</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-
-    <div class="w-full max-w-4xl px-4 md:px-5 lg:px-6 mx-auto">
-    <div class="max-xl:max-w-3xl max-xl:mx-auto">
-      <!-- Contenedor de la cuadrícula -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Columna 1: Título -->
-        <div class="flex items-center bg-white p-6 rounded-lg">
-          <h2 class="font-manrope font-bold text-4xl text-black mb-2 text-left">Escribí un comentario</h2>
-        </div>
-
-        <!-- Columna 2: Formulario -->
-        <div class="bg-white p-6 rounded-lg w-full">
-          <form @submit.prevent="submitComment">
-            <div class="mb-4">
-              <label for="comment" class="block text-gray-700 font-bold mb-2">Comentario:</label>
-              <textarea id="comment" v-model="newCommentText" rows="3"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Escribe tu comentario aquí..." required></textarea>
-            </div>
-            <button type="submit"
-              class="cursor-pointer bg-orange-500 py-3 px-6 rounded-full flex items-center justify-center text-sm font-semibold text-white transition-all duration-500 focus:outline-none hover:bg-gray-600">
-              <span v-if="submittingComment">Publicando comentario...</span>
-              <span v-else>Enviar comentario</span>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div v-for="(comment, index) in play.comments" :key="index"
-      class="pt-11 pb-8 border-b border-gray-100 max-xl:max-w-2xl max-xl:mx-auto">
-      <h3 class="font-manrope font-semibold text-xl sm:text-2xl leading-9 text-black mb-6">{{ comment.text }}</h3>
-      <div class="flex sm:items-center flex-col min-[400px]:flex-row justify-between gap-5 mb-4">
-        <div class="flex items-center gap-3">
-          <img src="https://pagedone.io/asset/uploads/1704349572.png" alt="John image" class="w-8 h-8 rounded-full">
-          <h6 class="text-lg leading-8 text-gray-400">{{ comment.userEmail }}</h6>
-        </div>
-        <p class="font-normal text-lg leading-8 text-gray-400">Nov 01, 2023</p>
-      </div>
-    </div>
   </div>
-  </div>
-  <div v-else>
-    <p class="text-center">Cargando...</p>
-  </div>
+  <Loading v-else />
 </template>
+
 
 <script>
 import { db } from '../services/firebase';
 import { doc, getDoc, collection, getDocs, addDoc } from 'firebase/firestore';
 import { auth } from '../services/firebase'; // Importa el servicio de autenticación de Firebase
-import { ArrowRightIcon } from "@vue-hero-icons/outline"
 import Loading from '/src/components/Loading.vue';
 
 export default {
@@ -156,21 +186,22 @@ export default {
     return {
       play: null,
       newCommentText: '',
-      submittingComment: false, // Variable para controlar el estado de publicación del comentario
-      currentUser: null, // Variable para almacenar la información del usuario actual
-      isModalOpen: false, // Controlar si el modal está abierto
-      modalImage: '', // URL de la imagen que se mostrará en el modal
+      submittingComment: false,
+      currentUser: null,
+      isModalOpen: false,
+      modalImage: '',
+      errorMessage: '',
     };
   },
   async created() {
-    const playId = this.$route.params.id; // Obtener el ID de la jugada desde los parámetros de la ruta
+    const playId = this.$route.params.id;
     await this.fetchPlayDetails(playId);
-    this.fetchCurrentUser(); // Obtener información del usuario actual
+    await this.fetchCurrentUser();
   },
   methods: {
     async fetchPlayDetails(playId) {
       try {
-        const playDoc = await getDoc(doc(db, 'players', playId)); // Obtener el documento de la jugada desde Firestore
+        const playDoc = await getDoc(doc(db, 'players', playId));
         if (playDoc.exists()) {
           const playData = playDoc.data();
           const commentsSnapshot = await getDocs(collection(db, 'players', playId, 'comments'));
@@ -185,49 +216,88 @@ export default {
         console.error('Error fetching play details: ', error);
       }
     },
+
     async fetchCurrentUser() {
       try {
         const user = auth.currentUser;
         if (user) {
-          // Aquí podrías obtener más detalles del usuario si es necesario (como el nombre)
           this.currentUser = user;
         }
       } catch (error) {
         console.error('Error fetching current user: ', error);
       }
     },
+
     async submitComment() {
+      // Limpiar el mensaje de error
+      this.errorMessage = '';
+      
+      // Validar que el comentario tenga al menos 5 caracteres
+      if (this.newCommentText.length < 5) {
+        this.errorMessage = 'Por favor, escribe un comentario de al menos 5 caracteres.';
+        return; // Detener la función si la validación falla
+      }
+      
       try {
         const playId = this.$route.params.id;
-        this.submittingComment = true; // Activar el estado de publicación del comentario
+        this.submittingComment = true;
         const newComment = {
-          userEmail: this.currentUser.displayName || this.currentUser.email, // Usar el nombre del usuario si está disponible, de lo contrario el email
+          userEmail: this.currentUser.displayName || this.currentUser.email,
           text: this.newCommentText,
+          date: new Date().toISOString()
         };
         await addDoc(collection(db, 'players', playId, 'comments'), newComment);
-        this.newCommentText = ''; // Limpiar el campo de texto después de enviar el comentario
-        // Actualizar la lista de comentarios mostrada en la UI (opcional, depende de cómo manejes la actualización)
+        this.newCommentText = '';
         await this.fetchPlayDetails(playId);
       } catch (error) {
         console.error('Error submitting comment: ', error);
       } finally {
-        this.submittingComment = false; // Desactivar el estado de publicación del comentario, independientemente del resultado
+        this.submittingComment = false;
       }
     },
+
     openModal(imageUrl) {
       this.modalImage = imageUrl;
       this.isModalOpen = true;
     },
+
     closeModal() {
       this.isModalOpen = false;
       this.modalImage = '';
     },
+
+    formatDate(date) {
+      if (!date) {
+        return 'Fecha no disponible';
+      }
+
+      const parsedDate = new Date(date);
+
+      if (isNaN(parsedDate.getTime())) {
+        return 'Fecha inválida';
+      }
+
+      return Intl.DateTimeFormat('es-AR', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit',
+      }).format(parsedDate).replace(',', '');
+    },
+  },
+
+  computed: {
+    sortedComments() {
+      return this.play.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
   },
 };
 </script>
 
 <style scoped>
-.container {
-  max-width: 800px;
+/* Estilo para el borde naranja al enfocar el campo de entrada */
+input:focus-visible {
+  outline: none;
+  /* Elimina el borde azul predeterminado */
+  box-shadow: 0 0 0 3px orange;
+  /* Aplica un borde naranja personalizado */
 }
 </style>

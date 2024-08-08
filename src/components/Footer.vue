@@ -9,9 +9,9 @@
                     class="text-lg flex items-center justify-center flex-col gap-7 md:flex-row md:gap-12 transition-all duration-500 py-16 mb-10 border-b border-gray-200">
 
                     <router-link to="/">
-                    <li>
-                        <a href="#" class="text-gray-800 transition-colors hover:text-orange-500">Inicio</a>
-                    </li>
+                        <li>
+                            <a href="#" class="text-gray-800 transition-colors hover:text-orange-500">Inicio</a>
+                        </li>
                     </router-link>
                     <router-link to="/jugadas">
                         <li>
@@ -21,12 +21,9 @@
                     <router-link to="/chat">
                         <li><a href="#" class=" text-gray-800 transition-colors hover:text-orange-500">Foros</a></li>
                     </router-link>
-                    <router-link to="/">
-                        <li><a href="#" class=" text-gray-800 transition-colors hover:text-orange-500">¿Qué es Fabi?</a>
-                        </li>
-                    </router-link>
                     <router-link to="/perfil">
-                        <li><a href="#" class=" text-gray-800 transition-colors hover:text-orange-500">Mi Perfil</a></li>
+                        <li><a href="#" class=" text-gray-800 transition-colors hover:text-orange-500">Mi Perfil</a>
+                        </li>
                     </router-link>
                 </ul>
                 <div class="flex space-x-10 justify-center items-center mb-14">

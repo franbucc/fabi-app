@@ -39,7 +39,7 @@ export default {
         // Simulate an async operation, replace this with your actual data fetching logic
         setTimeout(() => {
             this.hideLoading();
-        }, 3000); // Adjust the timeout to your needs
+        }, 700); // Adjust the timeout to your needs
     }
 };
 </script>

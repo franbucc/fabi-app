@@ -55,7 +55,6 @@
           <a href="#" class="text-sm font-semibold leading-6 text-gray-300">Foros</a>
         </router-link>
 
-        <a href="#" class="text-sm font-semibold leading-6 text-gray-300">¿Qué es Fabi?</a>
       </PopoverGroup>
 
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -92,12 +91,6 @@
                 <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Mi
                   Perfil</a>
               </router-link>
-              </MenuItem>
-              <MenuItem v-slot="{ active }">
-                <router-link to="/configuracion">
-              <a href="#"
-                :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Configuración</a>
-                </router-link>
               </MenuItem>
               <MenuItem v-slot="{ active }">
               <a href="#" @click="handleLogout"
@@ -152,12 +145,6 @@
                   </a>
                 </router-link>
 
-                <a href="#"
-                  class="-mx-3 block rounded-lg my- py-2 px-3 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-700"
-                  @click="closeMenu">
-                  ¿Qué es Fabi?
-                </a>
-
               </div>
               <div class="py-6">
                 <router-link to="/iniciar-sesion" v-if="!authUser">
@@ -175,12 +162,7 @@
                     </a>
                   </router-link>
 
-                  <router-link to="/configuracion">
-                    <a class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-700"
-                      @click="closeMenu">
-                      Configuración
-                    </a>
-                  </router-link>
+
                   <router-link to="/">
                     <a class="-mx-3 block rounded-lg py-2 px-3 mt-5 text-base font-semibold leading-7 text-red-300 bg-red-700 hover:bg-red-800"
                       @click="handleLogout">
@@ -205,12 +187,6 @@
                           Mi Perfil
                         </a>
                       </router-link>
-                      <router-link to="/configuracion">
-                      <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
-                        @click="closeMenu">
-                        Configuración
-                      </a>
-                    </router-link>
 
                       <a href="#" @click="handleLogout; closeMenu"
                         :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">

@@ -1,7 +1,7 @@
 <script>
 import Loader from '../components/Loader.vue';
 import MainH1 from '../components/MainH1.vue';
-import { getUserProfileById } from '../services/user-profile';
+import { getUserProfileById } from '../services/userProfile';
 
 export default {
     name: 'UserProfile',

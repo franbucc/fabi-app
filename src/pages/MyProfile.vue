@@ -9,6 +9,8 @@
         <!-- FOTO DE PERFIL -->
         <img v-if="photoPreview || user.photoURL" :src="photoPreview || user.photoURL" alt="Foto de perfil"
           class="w-40 h-40 object-cover border-4 border-solid border-white rounded-full">
+        <img v-else src="../../isotipo_fabi.png" alt="Foto de perfil"
+          class="w-40 h-40 object-cover border-4 border-solid border-white rounded-full" />
       </div>
 
 
@@ -41,118 +43,109 @@
 
   <div class="min-h-screen">
     <div class="container mx-auto py-8">
-      
 
-<!-- PUBLICACIONES -->
- <div class="mt-8">
-    <h2 class="font-manrope font-bold text-4xl text-gray-900 mb-14">Mis Publicaciones</h2>
-    <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8">
-      <div v-for="player in players" :key="player.id"
-        class="group cursor-pointer border border-gray-300 rounded-2xl p-5 flex flex-col transition-all duration-300 hover:border-orange-600">
 
-        <!-- Imagen del Jugador -->
-        <div class="flex flex-col flex-grow">
-          <div class="flex items-center mb-6">
-            <img v-if="player.photoUrl" :src="player.photoUrl" :alt="'Foto de ' + player.name"
-              class="rounded-lg w-full h-48 object-cover">
-            <div v-else class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
-              <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                </path>
-              </svg>
-            </div>
-          </div>
-          <h3 class="text-gray-900 font-bold text-2xl px-1 leading-8 mb-4">{{ player.name }}</h3>
-          <p class="text-gray-600">{{ player.description }}</p>
-          <div class="flex items-center mb-4">
-            <p class="text-gray-600 mb-2 mr-4">
-              <span class="font-semibold">Dificultad:</span>
-            </p>
-            <div class="flex space-x-1">
-              <font-awesome-icon v-for="i in 5" :key="i" :icon="['fas', 'basketball-ball']" :class="[
-                'text-xl',
-                i <= player.play_level ? 'text-orange-500' : 'text-gray-300'
-              ]" />
+      <!-- PUBLICACIONES -->
+      <div class="mt-8">
+        <div v-if="role === 'admin'">
+          <h2 class="font-manrope font-bold text-4xl text-gray-900 mb-14">Mis Publicaciones</h2>
+          <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8">
+            <div v-for="player in players" :key="player.id"
+              class="group cursor-pointer border border-gray-300 rounded-2xl p-5 flex flex-col transition-all duration-300 hover:border-orange-600">
+
+              <!-- Imagen del Jugador -->
+              <div class="flex flex-col flex-grow">
+                <div class="flex items-center mb-6">
+                  <img v-if="player.steps && player.steps.length > 0 && player.steps[0].photoUrl"
+                :src="player.steps[0].photoUrl" alt="Foto del Paso 1" class="rounded-lg w-full h-40 object-cover">
+                  <div v-else class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
+                    <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                      </path>
+                    </svg>
+                  </div>
+                </div>
+                <h3 class="text-gray-900 font-bold text-2xl px-1 leading-8 mb-4">{{ player.name }}</h3>
+                <p class="text-gray-600">{{ player.description }}</p>
+                <div class="flex items-center mb-4">
+                  <p class="text-gray-600 mb-2 mr-4">
+                    <span class="font-semibold">Dificultad:</span>
+                  </p>
+                  <div class="flex space-x-1">
+                    <font-awesome-icon v-for="i in 5" :key="i" :icon="['fas', 'basketball-ball']" :class="[
+                      'text-xl',
+                      i <= player.play_level ? 'text-orange-500' : 'text-gray-300'
+                    ]" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botones -->
+              <div class="mt-4 flex justify-end space-x-2">
+                <MainButton @click="openEditModal(player)"
+                  class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full">
+                  Editar
+                </MainButton>
+                <MainButton @click="confirmDelete(player.id)"
+                  class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full">
+                  Eliminar
+                </MainButton>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Botones -->
-        <div class="mt-4 flex justify-end space-x-2">
-          <MainButton @click="openEditModal(player)"
-            class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full">
-            Editar
-          </MainButton>
-          <MainButton @click="confirmDelete(player.id)"
-            class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full">
-            Eliminar
-          </MainButton>
+      <!-- Modal de Edición -->
+      <EditPlayModal :showModal="isModalOpen" :player="selectedPlayer" @close="closeEditModal" @save="updatePlayer" />
+    </div>
+
+
+
+    <!-- Modal de Confirmación de Eliminación -->
+    <div v-if="showDeleteModal"
+      class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+      <div class="bg-white p-8 rounded-md max-w-md">
+        <h1 class="text-2xl font-bold mb-4 text-center text-orange-500">Eliminar Publicación</h1>
+        <p class="text-center mb-4">¿Estás seguro de que deseas eliminar esta publicación?</p>
+        <div class="flex justify-center space-x-4">
+          <MainButton @click="deleteConfirmed" class="bg-red-500 hover:bg-red-600">Eliminar</MainButton>
+          <MainButton @click="cancelDelete" class="bg-gray-500 hover:bg-gray-600">Cancelar</MainButton>
         </div>
       </div>
     </div>
 
-    <!-- Modal de Edición -->
-    <EditPlayModal
-      :showModal="isModalOpen"
-      :player="selectedPlayer"
-      @close="closeEditModal"
-      @save="updatePlayer"
-    />
-  </div>
-
-
-
-      <!-- Modal de Confirmación de Eliminación -->
-      <div v-if="showDeleteModal"
-        class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-        <div class="bg-white p-8 rounded-md max-w-md">
-          <h1 class="text-2xl font-bold mb-4 text-center text-orange-500">Eliminar Publicación</h1>
-          <p class="text-center mb-4">¿Estás seguro de que deseas eliminar esta publicación?</p>
-          <div class="flex justify-center space-x-4">
-            <MainButton @click="deleteConfirmed" class="bg-red-500 hover:bg-red-600">Eliminar</MainButton>
-            <MainButton @click="cancelDelete" class="bg-gray-500 hover:bg-gray-600">Cancelar</MainButton>
+    <!-- Modal de Edición de Foto de Perfil -->
+    <div v-if="showEditPhotoModal"
+      class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50 p-4">
+      <div class="bg-white p-8 rounded-lg shadow-xl relative">
+        <h1 class="text-3xl font-extrabold mb-6 text-center text-black">Editar Foto de Perfil</h1>
+        <div class="flex flex-col items-center space-y-6 mb-6">
+          <label for="photoURLModal"
+            class="relative rounded-full overflow-hidden cursor-pointer w-32 h-32 bg-gray-100 border-4 border-orange-300 flex items-center justify-center">
+            <img v-if="photoPreview" :src="photoPreview" alt="Preview" class="w-full h-full object-cover">
+            <span v-else
+              class="flex items-center justify-center w-full h-full text-gray-600 text-lg font-medium">Seleccionar</span>
+            <input type="file" id="photoURLModal" class="hidden" @change="handleFileSelection">
+          </label>
+          <div class="flex space-x-4">
+            <button
+              class="py-4 px-5 rounded-full bg-orange-500 text-white font-semibold text-base leading-6 shadow-sm transition-all duration-500 hover:bg-orange-600"
+              @click="handleUpload">
+              Actualizar Foto
+            </button>
+            <button
+              class="py-2 px-4 rounded-full bg-gray-500 text-white font-semibold text-base leading-6 shadow-sm transition-all duration-500 hover:bg-gray-600"
+              @click="closeEditPhotoModal">
+              Cancelar
+            </button>
           </div>
         </div>
-      </div>
-
-      <!-- Modal de Edición de Foto de Perfil -->
-      <div v-if="showEditPhotoModal"
-        class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50 p-4">
-        <div class="bg-white p-8 rounded-lg shadow-xl relative">
-          <h1 class="text-3xl font-extrabold mb-6 text-center text-black">Editar Foto de Perfil</h1>
-          <div class="flex flex-col items-center space-y-6 mb-6">
-            <label for="photoURLModal"
-              class="relative rounded-full overflow-hidden cursor-pointer w-32 h-32 bg-gray-100 border-4 border-orange-300 flex items-center justify-center">
-              <img v-if="photoPreview" :src="photoPreview" alt="Preview" class="w-full h-full object-cover">
-              <span v-else
-                class="flex items-center justify-center w-full h-full text-gray-600 text-lg font-medium">Seleccionar</span>
-              <input type="file" id="photoURLModal" class="hidden" @change="handleFileSelection">
-            </label>
-            <div class="flex space-x-4">
-              <button
-                class="py-4 px-5 rounded-full bg-orange-500 text-white font-semibold text-base leading-6 shadow-sm transition-all duration-500 hover:bg-orange-600"
-                @click="handleUpload">
-                Actualizar Foto
-              </button>
-              <button
-                class="py-2 px-4 rounded-full bg-gray-500 text-white font-semibold text-base leading-6 shadow-sm transition-all duration-500 hover:bg-gray-600"
-                @click="closeEditPhotoModal">
-                Cancelar
-              </button>
-            </div>
-          </div>
-          <div v-if="loading" class="text-center text-orange-500 text-lg font-semibold">Subiendo...</div>
-        </div>
+        <div v-if="loading" class="text-center text-orange-500 text-lg font-semibold">Subiendo...</div>
       </div>
     </div>
   </div>
-
-  <section class="container mx-auto">
-    <h2 class="py-8 font-manrope font-bold text-3xl text-gray-900 mb-5">Mis Favoritos</h2>
-  </section>
-
-
 
   <!-- MODAL NOMBRE -->
   <section v-if="editMode" class="py-12 w-full max-w-7xl mx-auto px-6 md:px-8">
@@ -233,7 +226,6 @@ import MainButton from '../components/MainButton.vue';
 import Loading from '/src/components/Loading.vue';
 import EditPlayModal from '/src/components/EditPlayModal.vue';
 
-
 export default {
   name: 'MyProfile',
   components: {
@@ -259,12 +251,8 @@ export default {
       editingPlayer: null,
       editPasswordMode: false,
       confirmPassword: '',
-      editPasswordMode: false,
-      newPassword: '',
-      confirmPassword: '',
       showNewPassword: false,
       showConfirmPassword: false,
-      editPasswordMode: false,
       successMessage: '',
       isModalOpen: false,
       selectedPlayer: null,
@@ -273,7 +261,6 @@ export default {
   created() {
     // Cargar datos del usuario y jugadores al inicio
     this.loadUserData();
-    this.fetchPlayers();
   },
   methods: {
     openEditModal(player) {
@@ -284,52 +271,41 @@ export default {
       this.isModalOpen = false;
     },
     updatePlayer(updatedPlayer) {
-    const index = this.players.findIndex(player => player.id === updatedPlayer.id);
-    if (index !== -1) {
-      // Actualiza el objeto reactivo directamente
-      this.players[index] = updatedPlayer;
-    }
-  },
-    confirmDelete(playerId) {
-      // Lógica para confirmar y eliminar el jugador
+      const index = this.players.findIndex(player => player.id === updatedPlayer.id);
+      if (index !== -1) {
+        // Actualiza el objeto reactivo directamente
+        this.players[index] = updatedPlayer;
+      }
     },
-    toggleShowNewPassword() {
-      this.showNewPassword = !this.showNewPassword;
-    },
-    toggleShowConfirmPassword() {
-      this.showConfirmPassword = !this.showConfirmPassword;
-    },
-    methods: {
-      async savePasswordChanges() {
-        if (this.newPassword !== this.confirmPassword) {
-          alert('Las contraseñas no coinciden');
+    async savePasswordChanges() {
+      if (this.newPassword !== this.confirmPassword) {
+        alert('Las contraseñas no coinciden');
+        return;
+      }
+
+      try {
+        const user = auth.currentUser;
+
+        if (!user) {
+          alert('No estás autenticado');
           return;
         }
 
-        try {
-          const user = auth.currentUser;
+        // Cambia la contraseña del usuario
+        await updatePassword(user, this.newPassword);
 
-          if (!user) {
-            alert('No estás autenticado');
-            return;
-          }
+        // Actualiza la base de datos si es necesario
+        await updateDoc(doc(db, 'users', user.uid), {
+          lastPasswordChange: new Date()
+        });
 
-          // Cambia la contraseña del usuario
-          await updatePassword(user, this.newPassword);
-
-          // Actualiza la base de datos si es necesario
-          await updateDoc(doc(db, 'users', user.uid), {
-            lastPasswordChange: new Date()
-          });
-
-          // Mensaje de éxito
-          this.successMessage = 'Contraseña modificada con éxito';
-          this.editPasswordMode = false;
-        } catch (error) {
-          console.error('Error al cambiar la contraseña:', error);
-          alert('Error al cambiar la contraseña');
-        }
-      },
+        // Mensaje de éxito
+        this.successMessage = 'Contraseña modificada con éxito';
+        this.editPasswordMode = false;
+      } catch (error) {
+        console.error('Error al cambiar la contraseña:', error);
+        alert('Error al cambiar la contraseña');
+      }
     },
     async loadUserData() {
       const currentUser = auth.currentUser;
@@ -342,6 +318,11 @@ export default {
         if (userDoc.exists()) {
           const userData = userDoc.data();
           this.role = userData.role;
+
+          // Solo cargar jugadores si el usuario es admin
+          if (this.role === 'admin') {
+            this.fetchPlayers();
+          }
         }
       }
     },
@@ -464,6 +445,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 /* Estilos específicos para este componente */

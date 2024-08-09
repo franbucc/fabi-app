@@ -36,12 +36,11 @@
 
         <!-- Contenido -->
 
-        <!-- PASO 1 -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-9 border-b-4 border-orange-500 pb-6 mb-6">
+        <div v-for="(step, index) in play.steps" :key="index"
+          class="grid grid-cols-1 lg:grid-cols-2 gap-9 border-b-4 border-orange-500 pb-6 mb-6">
           <!-- Imagen -->
           <div class="img-box flex justify-center lg:justify-start">
-            <img v-if="play.photoUrl" :src="play.photoUrl" alt="Foto de la jugada" class="max-lg:mx-auto"
-              @click="openModal(play.photoUrl)">
+            <img v-if="step.photoUrl" :src="step.photoUrl" alt="Imagen del paso" @click="openModal(step.photoUrl)">
 
             <!-- Modal -->
             <div v-if="isModalOpen" @click.self="closeModal"
@@ -60,43 +59,10 @@
           <div class="flex flex-col justify-start lg:pl-[100px]">
             <div class="data w-full">
               <h2 class="font-manrope font-bold text-4xl lg:text-4xl text-black mb-3 max-lg:text-center">
-                Paso #1
+                Paso #{{ index + 1 }}
               </h2>
               <p class="font-normal text-lg leading-8 text-gray-500 max-lg:text-center max-w-2xl mx-auto">
-                Descripción del paso #1.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- PASO 2 -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-9 border-b-4 border-orange-500 pb-6 mb-6">
-          <!-- Imagen -->
-          <div class="img-box flex justify-center lg:justify-start">
-            <img v-if="play.photoUrl" :src="play.photoUrl" alt="Foto de la jugada" class="max-lg:mx-auto"
-              @click="openModal(play.photoUrl)">
-
-            <!-- Modal -->
-            <div v-if="isModalOpen" @click.self="closeModal"
-              class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-              <div class="relative max-w-4xl mx-auto p-4 bg-white rounded-lg shadow-lg">
-                <button @click="closeModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
-                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
-                  </svg>
-                </button>
-                <img :src="modalImage" alt="Imagen de la jugada" class="w-full h-auto rounded-lg">
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col justify-start lg:pl-[100px]">
-            <div class="data w-full">
-              <h2 class="font-manrope font-bold text-4xl lg:text-4xl text-black mb-3 max-lg:text-center">
-                Paso #2
-              </h2>
-              <p class="font-normal text-lg leading-8 text-gray-500 max-lg:text-center max-w-2xl mx-auto">
-                Descripción del paso #2.
+                {{ step.description }}
               </p>
             </div>
           </div>
@@ -136,8 +102,9 @@
                     <div class="w-full justify-between items-center inline-flex">
                       <div class="justify-start items-center gap-2.5 flex">
                         <div class="w-10 h-10 bg-gray-300 rounded-full justify-start items-start gap-2.5 flex">
-                          <img class="rounded-full" src="https://pagedone.io/asset/uploads/1714988283.png"
-                            alt="Foto de perfil" />
+                          <img v-if="comment.userPhotoURL" :src="comment.userPhotoURL" alt="Foto de perfil"
+                            class="rounded-full w-10 h-10" />
+                          <img v-else src="../../isotipo_fabi.png" alt="Foto de perfil" class="rounded-full" />
                         </div>
                         <div class="flex-col justify-start items-start gap-1 inline-flex">
                           <h5 class="text-gray-900 text-sm font-semibold leading-snug">{{ comment.userEmail }}</h5>
@@ -163,16 +130,15 @@
 
   </div>
 
-  
   <Loading v-else />
 </template>
 
 
 <script>
-import { db } from '../services/firebase';
+import { db, auth } from '../services/firebase';
 import { doc, getDoc, collection, getDocs, addDoc } from 'firebase/firestore';
-import { auth } from '../services/firebase'; // Importa el servicio de autenticación de Firebase
 import Loading from '/src/components/Loading.vue';
+import { onAuthStateChanged } from 'firebase/auth'; // Importa el servicio de autenticación de Firebase
 
 export default {
   components: {
@@ -181,6 +147,7 @@ export default {
   name: 'PlayDetails',
   data() {
     return {
+      user: null,
       play: null,
       newCommentText: '',
       submittingComment: false,
@@ -194,6 +161,14 @@ export default {
     const playId = this.$route.params.id;
     await this.fetchPlayDetails(playId);
     await this.fetchCurrentUser();
+
+    // Suscribirse al estado de autenticación para manejar cambios de usuario
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        this.currentUser = user;
+        this.currentUser.photoURL = user.photoURL;
+      }
+    });
   },
   methods: {
     async fetchPlayDetails(playId) {
@@ -219,6 +194,7 @@ export default {
         const user = auth.currentUser;
         if (user) {
           this.currentUser = user;
+          this.currentUser.photoURL = user.photoURL; // Asegúrate de obtener la foto de perfil
         }
       } catch (error) {
         console.error('Error fetching current user: ', error);
@@ -241,7 +217,8 @@ export default {
         const newComment = {
           userEmail: this.currentUser.displayName || this.currentUser.email,
           text: this.newCommentText,
-          date: new Date().toISOString()
+          date: new Date().toISOString(),
+          userPhotoURL: this.currentUser.photoURL // Agrega la URL de la foto de perfil al comentario
         };
         await addDoc(collection(db, 'players', playId, 'comments'), newComment);
         this.newCommentText = '';
@@ -288,6 +265,8 @@ export default {
   },
 };
 </script>
+
+
 
 <style scoped>
 /* Estilo para el borde naranja al enfocar el campo de entrada */

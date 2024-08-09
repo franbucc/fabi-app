@@ -3,7 +3,7 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile as firebaseUpdateProfile, sendPasswordResetEmail } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "./firebase"; // Asegúrate de que db esté importado
-import { createUserProfile } from "./user-profile";
+import { createUserProfile } from "./userProfile";
 
 const AUTH_EMPTY_STATE = {
     id: null,

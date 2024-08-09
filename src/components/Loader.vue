@@ -1,12 +1,12 @@
+<template>
+    <div class="lds-dual-ring"></div>
+</template>
+
 <script>
 export default {
     name: 'Loader',
 }
 </script>
-
-<template>
-    <div class="lds-dual-ring"></div>
-</template>
 
 <style scoped>
 .lds-dual-ring,

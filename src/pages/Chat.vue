@@ -17,7 +17,7 @@
                             >
                                 <div class="flex items-center mb-2">
                                     <router-link 
-                                        class="text-blue-600 font-semibold"
+                                        class="text-orange-600 font-semibold"
                                         :to="userRoute(message.userId)"
                                     >
                                         {{ message.email }}

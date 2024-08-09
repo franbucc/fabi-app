@@ -2,8 +2,8 @@
 import Loader from '../components/Loader.vue';
 import MainButton from '../components/MainButton.vue';
 import MainH1 from '../components/MainH1.vue';
-import { sendPrivateChatMessage, subscribeToPrivateChat } from '../services/private-chat';
-import { getUserProfileById } from '../services/user-profile';
+import { sendPrivateChatMessage, subscribeToPrivateChat } from '../services/privateChat';
+import { getUserProfileById } from '../services/userProfile';
 import { subscribeToAuth } from '../services/auth';
 
 export default {

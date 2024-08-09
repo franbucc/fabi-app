@@ -76,8 +76,9 @@
             <div class="flex justify-end gap-4">
                 <button type="submit"
                     class="px-6 py-3 bg-orange-500 text-white font-bold rounded-lg shadow-lg hover:bg-orange-600 transition duration-300 focus:outline-none">
-                    Agregar Jugada
+                    {{ isAdding ? 'Agregando Jugada...' : 'Agregar Jugada' }}
                 </button>
+
                 <button type="button" @click="closeForm"
                     class="px-6 py-3 bg-gray-300 text-gray-700 font-bold rounded-lg shadow-lg hover:bg-gray-400 transition duration-300 focus:outline-none">
                     Cerrar Ventana
@@ -115,6 +116,7 @@ export default {
                 { photo: null, photoUrl: '', description: '' },
                 { photo: null, photoUrl: '', description: '' }
             ],
+            isAdding: false, // Nuevo estado
         };
     },
     methods: {
@@ -176,6 +178,7 @@ export default {
             return downloadURL;
         },
         async addPlay() {
+            this.isAdding = true; // Cambia el estado a true al iniciar el proceso
             try {
                 const stepUrls = await Promise.all(this.steps.map(async (step) => {
                     if (step.photoUrl && step.photoUrl.startsWith('blob:')) {
@@ -204,6 +207,8 @@ export default {
                 this.closeForm();
             } catch (error) {
                 console.error('Error adding play: ', error);
+            } finally {
+                this.isAdding = false; // Cambia el estado a false al finalizar
             }
         },
         setDifficulty(level) {
